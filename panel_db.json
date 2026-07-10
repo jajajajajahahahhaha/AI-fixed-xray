@@ -44,7 +44,7 @@
         "use_runner_balancer": true,
         "optimization": true,
         "private_tunnel_enabled": true,
-        "private_tunnel_host": "may-raised-stream-justify.trycloudflare.com",
+        "private_tunnel_host": "bid-wider-cocktail-comparison.trycloudflare.com",
         "subscription_alias": ""
     }
 }
