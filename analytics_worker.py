@@ -847,10 +847,15 @@ def sync_xray_core():
         for u_name, u_data in PANEL_DATABASE.items()
         if u_data.get("active", True) and u_data.get("is_proxy_type", False) and str(u_data.get("proxy_protocol", "socks5")).lower() != "mtproto"
     ]
-    has_mtproto_proxy = any(
-        u_data.get("active", True) and u_data.get("is_proxy_type", False) and str(u_data.get("proxy_protocol", "")).lower() == "mtproto"
-        for u_data in PANEL_DATABASE.values()
-    )
+    # ─────────────────────────────────────────────
+    # FIX: هسته Xray جدید (>= v1.8) دیگه پروتکل mtproto رو داخل خودش پشتیبانی نمیکنه
+    # ("unknown config id: mtproto"). قبلاً اگه یه کاربر با proxy_protocol=mtproto
+    # فعال بود، کل config Xray invalid میشد و هسته اصلاً بالا نمیومد.
+    # حالا mtproto رو از config Xray کامل حذف میکنیم — کاربر و لینک ساب mtproto
+    # توی UI و DB دست‌نخورده باقی میمونن، فقط دیگه به‌عنوان یه inbound داخل Xray
+    # ثبت نمیشه. این باعث میشه هسته Xray سالم استارت بشه.
+    # ─────────────────────────────────────────────
+    has_mtproto_proxy = False  # همیشه False — mtproto در Xray جدید ساپورت نمیشه
 
     any_optimized = any(
         u_data.get("optimization", False)
@@ -1013,6 +1018,21 @@ def sync_xray_core():
 
     xray_bin = shutil.which('xray') or '/usr/local/bin/xray'
     if os.path.exists(xray_bin) or shutil.which(xray_bin):
+        # ── FIX: قبل از اجرا، config رو test کنیم تا اگر مشکلی بودا لاگ کنیم ──
+            # (تا اگر دوباره protocol جدیدی حذف بشه فوری میفهمیم)
+        try:
+            test_res = subprocess.run(
+                f"sudo {xray_bin} -config {XRAY_CONFIG_PATH} -test",
+                shell=True, capture_output=True, text=True, timeout=10
+            )
+            if test_res.returncode != 0:
+                err_snippet = (test_res.stderr or test_res.stdout or "").strip().splitlines()
+                err_snippet = " | ".join(err_snippet[-5:])[:500]
+                print(f"🚨 Xray config تست fail شد: {err_snippet}", flush=True)
+                push_channel_event(f"🚨 Xray config invalid: {err_snippet[:200]}")
+        except Exception as e:
+            print(f"⚠️ Xray test اجرا نشد: {e}", flush=True)
+
         # تا ۳ بار تلاش برای راه‌اندازی
         started = False
         for attempt in range(3):
