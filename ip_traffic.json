@@ -16,20 +16,25 @@
     "89.196.55.160": {
         "user": "Main_kill_pv2_8086",
         "first_seen": 1783779001,
-        "last_seen": 1783779021,
+        "last_seen": 1783779228,
         "used_bytes": 0,
         "sites": [
-            "www.gstatic.com"
+            "www.gstatic.com",
+            "api.ip.sb",
+            "mtalk.google.com",
+            "mqtt-mini.facebook.com",
+            "alive.github.com",
+            "web.facebook.com",
+            "clients4.google.com"
         ],
-        "connections": 3
+        "connections": 28
     },
     "5.122.14.120": {
         "user": "Main_kill_pv2_8086",
         "first_seen": 1783779147,
-        "last_seen": 1783779200,
+        "last_seen": 1783779230,
         "used_bytes": 0,
         "sites": [
-            "www.gstatic.com",
             "api.ip.sb",
             "play-fe.googleapis.com",
             "connectivitycheck.gstatic.com",
@@ -38,8 +43,19 @@
             "firebaselogging.googleapis.com",
             "www.pullcf.com",
             "api2.wshareit.com",
-            "ad.mail.ru"
+            "ad.mail.ru",
+            "youtubei.googleapis.com",
+            "shareit-push-cdn.wshareit.com",
+            "i.ytimg.com",
+            "ps.hpytimes.info",
+            "dt.beyla.site",
+            "play-lh.googleusercontent.com",
+            "ds.hpytimes.info",
+            "www.pullcm.com",
+            "api.whatsapp.net",
+            "notifications-pa.googleapis.com",
+            "play.googleapis.com"
         ],
-        "connections": 53
+        "connections": 70
     }
 }
